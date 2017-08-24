@@ -1,30 +1,33 @@
 from app import connect_db
 from mongoengine.connection import _get_db
+from mongoengine import *
+
 import unittest
 
 from models.user import User
 
 
+
 class UserTest(unittest.TestCase):
     def setUp(self):
-        connect_db(db="test-temp")
+        self.db_client = connect_db(db="test-temp")
 
     def tearDown(self):
         db = _get_db()
-        db.client.drop_database(db)
+        self.db_client.drop_database(db)
 
     def user_dict(self):
         return dict(
-            first_name="Jorge",
-            last_name="Escobar",
             username="jorge",
             email="jorge@example.com",
-            password="test123",
-            confirm="test123"
+            password="test123"
         )
 
     def test_create_user(self):
-        user = User(self.user_dict())
+        default_user = self.user_dict()
+        user = User(username = default_user['username'],
+                    email = default_user['email'],
+                    password = default_user['password'])
         
         user.save()
        

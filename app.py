@@ -13,10 +13,8 @@ def connect_db(**config_overrides):
         for k, v in list(config_overrides.items()):
             config[k] = v
 
-    return connect(config)
+    return connect(db=config['db'], host=config['host'], port=config['port'])
 
-
-db = connect_db()
 
 if __name__ == "__main__":
     db = connect_db(db="temp")
